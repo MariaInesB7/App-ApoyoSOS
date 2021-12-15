@@ -82,7 +82,12 @@ class _WelcomePageState extends State<WelcomePage> {
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
 
       child: ElevatedButton(
-        onPressed:(){},
+        onPressed:() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        },
         child: Text('FINALIZAR TURNO'),
         style: ElevatedButton.styleFrom(
           primary: MyColors.colorsBottom,
