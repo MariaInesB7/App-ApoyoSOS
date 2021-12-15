@@ -27,19 +27,21 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Registro de Turno'),
-      ),
+
       body: Container(
         width: double.infinity,
         child: Stack(
           children: [
 
             SingleChildScrollView(
-              child: Column(
-                children: [
 
-                  SizedBox(height: 50, width: 30),
+
+              child: Column(
+
+                children: [
+                   Image.network("https://img.freepik.com/free-vector/blue-res-flasher-siren-vector-icon-set-isolated-white-background-alert-flashing-light-with-rays-flat-cartoon-style-siren-police-ambulance-light-illustration_502274-302.jpg?size=338&ext=jpg"),
+
+                 // SizedBox(height: 250, width: 300),
 
                   _textRegister(),
                   Text('Su turno ya está activo'),
