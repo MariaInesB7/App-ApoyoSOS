@@ -54,7 +54,9 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
 
-                  SizedBox(height: 250, width: 300),
+                  SizedBox(height: 100, width: 300),
+                  Text('Registre su turno para empezar'),
+                  SizedBox(height: 50, width: 300),
                  // _textFieldEmail(),
                   _textFieldName(), //Fecha
                   _textFieldLastName(), //Hora
