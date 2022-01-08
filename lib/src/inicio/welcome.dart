@@ -1,9 +1,12 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_proyecto/src/login/login_page.dart';
 import 'package:flutter_proyecto/src/register/register_controller.dart';
 import 'package:flutter_proyecto/src/login/login_controller.dart';
 import 'package:flutter_proyecto/src/utils/my_colors.dart';
+import 'package:location/location.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key key}) : super(key: key);
@@ -14,6 +17,11 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
  // RegisterController _con = new RegisterController();
+  Location location = new Location();
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
+  LocationData _locationData;
+  bool _isListenLocation= false,_isGetLocation=false;
   @override
   void initState() {
     // TODO: implement initState
@@ -32,6 +40,7 @@ class _WelcomePageState extends State<WelcomePage> {
         width: double.infinity,
         child: Stack(
           children: [
+            _buttonEmpezarT(),
 
             SingleChildScrollView(
 
@@ -39,9 +48,10 @@ class _WelcomePageState extends State<WelcomePage> {
               child: Column(
 
                 children: [
-                   Image.network("https://img.freepik.com/free-vector/blue-res-flasher-siren-vector-icon-set-isolated-white-background-alert-flashing-light-with-rays-flat-cartoon-style-siren-police-ambulance-light-illustration_502274-302.jpg?size=338&ext=jpg"),
+                  SizedBox(height: 100, width: 300),
+                  // Image.network("https://img.freepik.com/free-vector/blue-res-flasher-siren-vector-icon-set-isolated-white-background-alert-flashing-light-with-rays-flat-cartoon-style-siren-police-ambulance-light-illustration_502274-302.jpg?size=338&ext=jpg"),
 
-                 // SizedBox(height: 250, width: 300),
+
 
                   _textRegister(),
                   Text('Su turno ya está activo'),
@@ -101,7 +111,46 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
+  Widget _buttonEmpezarT(){
+    return Column(
+      //width: double.infinity,
+      //margin: EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+    crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed:() async {
 
+           _serviceEnabled = await location.serviceEnabled();
+           if(!_serviceEnabled){
+             _serviceEnabled = await location.requestService();
+             if(_serviceEnabled) return;
+           }
+           _permissionGranted = await location.hasPermission();
+           if(_permissionGranted == PermissionStatus.denied){
+             _permissionGranted = await location.requestPermission();
+             if (_permissionGranted != PermissionStatus.granted) return;
+           }
+           setState(() {
+             _isListenLocation=true;
+           });
+
+          },
+          child: Text('EMPEZAR TURNO')),
+          StreamBuilder(
+              stream: location.onLocationChanged,
+              builder: (content,snapshot){
+                if(snapshot.connectionState != ConnectionState.waiting)
+                {
+                  var data = snapshot.data as LocationData;
+                  return Text('Posición: \n ${data.latitude}/${data.longitude}');
+                }else return Center(child: CircularProgressIndicator(),);
+              }),
+
+      ],
+
+    );
+  }
 
 
   Widget _circle(){
